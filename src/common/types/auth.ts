@@ -1,0 +1,6 @@
+export enum AUTH_ROLES {
+  ADMIN = 'KOLACHE_ADMIN',
+  KOLACHE_GAME_USER = 'KOLACHE_GAME_USER',
+  // do not use in production
+  KOLACHE_TESTING = 'KOLACHE_TESTING',
+}
