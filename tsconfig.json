@@ -26,6 +26,7 @@
       "types/*": ["./src/common/types/*"],
       "decorators/*": ["./src/common/decorators/*"],
       "services/*": ["./src/microservices/core/services/*"],
+      "src/*": ["./src/*"]
     }
   }
 }

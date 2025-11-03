@@ -14,7 +14,7 @@ import { SignInUserDTO } from './dto/sign-in-user.dto';
 import { AuthService } from './auth.service';
 import { SignUpUserDTO } from './dto/sign-up-user.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { AUTH_ROLES } from 'src/common/types/auth';
+import { AUTH_ROLES } from 'types/auth';
 
 @Controller('auth')
 export class AuthController {

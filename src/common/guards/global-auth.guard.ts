@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { AuthService } from 'src/microservices/core/auth/auth.service';
+import { AuthService } from 'src/microservices/core/auth/auth.service'; 
 import { AUTH_ROLES } from '../types/auth';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 

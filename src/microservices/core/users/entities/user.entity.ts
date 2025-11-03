@@ -1,4 +1,4 @@
-import { AUTH_ROLES } from 'src/common/types/auth';
+import { AUTH_ROLES } from 'types/auth'; 
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
