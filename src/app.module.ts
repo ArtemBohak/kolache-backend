@@ -6,6 +6,7 @@ import { GlobalAuthGuard } from './common/guards/global-auth.guard';
 import { KolacheGameModule } from './microservices/kolache-game/kolache-game.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './microservices/core/users/users.module';
+import { ApiModule } from './microservices/core/services/api/api.module';
 
 @Module({
   imports: [
@@ -23,6 +24,10 @@ import { UsersModule } from './microservices/core/users/users.module';
         database: configService.get<string>('DB_NAME') as string,
         entities: [],
         autoLoadEntities: true,
+        invalidWhereValuesBehavior: {
+          null: 'sql-null',
+          undefined: 'ignore',
+        },
         synchronize: configService.get<boolean>('IS_PRODUCTION', false)
           ? false
           : true,
@@ -30,10 +35,16 @@ import { UsersModule } from './microservices/core/users/users.module';
     }),
     AuthModule,
     UsersModule,
+    ApiModule,
     RouterModule.register([
       {
         path: 'kolache-game',
         module: KolacheGameModule,
+      },
+    ]),
+    RouterModule.register([
+      {
+        path: 'kolache-bot',
       },
     ]),
   ],

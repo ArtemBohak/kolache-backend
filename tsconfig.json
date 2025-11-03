@@ -20,6 +20,12 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "guards/*": ["./src/common/decorators/*"],
+      "types/*": ["./src/common/types/*"],
+      "decorators/*": ["./src/common/decorators/*"],
+      "services/*": ["./src/microservices/core/services/*"],
+    }
   }
 }

@@ -22,13 +22,13 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "type-check": "tsc --noEmit",
-    "prettier": "prettier --ignore-path=.prettierignore --write --config .prettierrc.json \"**/*.{js,ts,json,md}\"",
+    "prettier": "prettier",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --fix",
-      "prettier --write"
+      "prettier"
     ]
   },
   "dependencies": {
