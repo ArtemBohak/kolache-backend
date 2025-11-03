@@ -37,6 +37,8 @@ import { KolacheBotModule } from './microservices/kolache-bot/kolache-bot.module
     AuthModule,
     UsersModule,
     ApiModule,
+    KolacheGameModule,
+    KolacheBotModule,
     RouterModule.register([
       {
         path: 'kolache-game',
