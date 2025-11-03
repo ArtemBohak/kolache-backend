@@ -6,4 +6,4 @@ import { CronsController } from './controllers/crons.controller';
   imports: [],
   providers: [],
 })
-export class KolacheBot {}
+export class KolacheBotModule {}

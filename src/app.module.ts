@@ -7,6 +7,7 @@ import { KolacheGameModule } from './microservices/kolache-game/kolache-game.mod
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './microservices/core/users/users.module';
 import { ApiModule } from './microservices/core/services/api/api.module';
+import { KolacheBotModule } from './microservices/kolache-bot/kolache-bot.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ApiModule } from './microservices/core/services/api/api.module';
     RouterModule.register([
       {
         path: 'kolache-bot',
+        module: KolacheBotModule,
       },
     ]),
   ],
