@@ -21,7 +21,7 @@ export class KolacheBotService {
         text: message,
         parse_mode: 'Markdown',
         message_thread_id: threadId,
-      }
+      },
     );
     return response;
   }
