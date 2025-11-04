@@ -9,7 +9,7 @@
     "node": "22.21.1"
   },
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && tsc-alias",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
