@@ -13,11 +13,9 @@ export class CronsController {
 
   @Get('money-count-notification-cron')
   async moneyCountNotificationCron() {
-    console.log('hohoho');
-    await new Promise((res) => res('ho'));
-    // await this.kolacheBotService.sendMessage(
-    //   'Якщо сьогодні ви працюєте до 14:00, то порахуйте касу та скиньте Артему повідомлення в лс',
-    // );
+    await this.kolacheBotService.sendMessage(
+      'Якщо сьогодні ви працюєте до 14:00, то порахуйте касу та скиньте Артему повідомлення в лс',
+    );
     return;
   }
 }
