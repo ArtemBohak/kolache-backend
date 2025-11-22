@@ -21,9 +21,16 @@ export class CronsController {
     return;
   }
 
-  @Get('stocktaking-notification-first-tuesday-cron')
-  async stocktakingNotificationFirstTuesdayCron() {
-    await this.telegramApiService.sendMessageToKolacheChannel(`
+  @Get('stocktaking-notification-tuesday-cron')
+  async stocktakingNotificationTuesdayCron() {
+    const today = new Date();
+    const date = today.getDate();
+
+    const firstOrThirdTuesday =
+      (date >= 1 && date <= 7) || (date >= 15 && date <= 21);
+
+    if (firstOrThirdTuesday) {
+      await this.telegramApiService.sendMessageToKolacheChannel(`
 Інвентаризація ВТ-1.
 Проведіть інвентаризацію по даному списку до 12:00 та надішліть Артему:
 Айріш гарячий шоколад
@@ -50,41 +57,9 @@ export class CronsController {
 Сік Cappy 200мл
 Спрайт
 Фанта
-Швепс 330мл
-`);
-    return;
-  }
-
-  @Get('stocktaking-notification-first-thursday-cron')
-  async stocktakingNotificationFirstThursdayCron() {
-    await this.telegramApiService.sendMessageToKolacheChannel(`
-Інвентаризація ЧТ-1.
-Проведіть інвентаризацію по даному списку до 12:00 та надішліть Артему:
-Чай Зелений Гуань Інь
-Чай Зелений Оолонг
-Чай Травʼяний Альпійський луг
-Чай Чорний Дарджилінг
-Чай преміум
-б/к кава
-Кава в зернах
-Цукор в стіках
-Вершки аерозольні
-Коржик
-Печиво з передбаченням
-Шоколатьє
-Горішок зі згущеним молоком
-Горішок фісташка з вишнею
-Горішок дорблю
-Горішок з полуницею
-Блонді лимонний
-Блонді фісташковий
-`);
-    return;
-  }
-
-  @Get('stocktaking-notification-second-tuesday-cron')
-  async stocktakingNotificationSecondTuesdaydayCron() {
-    await this.telegramApiService.sendMessageToKolacheChannel(`
+Швепс 330мл`);
+    } else {
+      await this.telegramApiService.sendMessageToKolacheChannel(`
 Інвентаризація ВТ-2.
 Проведіть інвентаризацію по даному списку до 12:00 та надішліть Артему:
 Банановий Крем
@@ -122,12 +97,42 @@ export class CronsController {
 Молоко згущене
 Олія
 `);
+    }
+
     return;
   }
 
-  @Get('stocktaking-notification-second-thursday-cron')
-  async stocktakingNotificationSecondThursdayCron() {
-    await this.telegramApiService.sendMessageToKolacheChannel(`
+  @Get('stocktaking-notification-thursday-cron')
+  async stocktakingNotificationThursdayCron() {
+    const today = new Date();
+    const date = today.getDate();
+    const firstOrThirdThursday =
+      (date >= 1 && date <= 7) || (date >= 15 && date <= 21);
+    if (firstOrThirdThursday) {
+      await this.telegramApiService.sendMessageToKolacheChannel(`
+Інвентаризація ЧТ-1.
+Проведіть інвентаризацію по даному списку до 12:00 та надішліть Артему:
+Чай Зелений Гуань Інь
+Чай Зелений Оолонг
+Чай Травʼяний Альпійський луг
+Чай Чорний Дарджилінг
+Чай преміум
+б/к кава
+Кава в зернах
+Цукор в стіках
+Вершки аерозольні
+Коржик
+Печиво з передбаченням
+Шоколатьє
+Горішок зі згущеним молоком
+Горішок фісташка з вишнею
+Горішок дорблю
+Горішок з полуницею
+Блонді лимонний
+Блонді фісташковий
+  `);
+    } else {
+      await this.telegramApiService.sendMessageToKolacheChannel(`
 Інвентаризація ЧТ-2.
 Проведіть інвентаризацію по даному списку до 12:00 та надішліть Артему:
 Пряний гарбуз сироп
@@ -179,6 +184,7 @@ export class CronsController {
 Шинка
 яйце
 `);
+    }
     return;
   }
 }
