@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './microservices/core/users/users.module';
 import { ApiModule } from './microservices/core/services/api/api.module';
 import { KolacheBotModule } from './microservices/kolache-bot/kolache-bot.module';
+import { HealthCheckModule } from './microservices/core/health-check/health-check.module';
 
 @Module({
   imports: [
@@ -29,15 +30,14 @@ import { KolacheBotModule } from './microservices/kolache-bot/kolache-bot.module
           null: 'sql-null',
           undefined: 'ignore',
         },
-        synchronize: configService.get<boolean>('IS_PRODUCTION', false)
-          ? false
-          : true,
+        synchronize: false,
       }),
     }),
     AuthModule,
     UsersModule,
     ApiModule,
     KolacheGameModule,
+    HealthCheckModule,
     KolacheBotModule,
     RouterModule.register([
       {

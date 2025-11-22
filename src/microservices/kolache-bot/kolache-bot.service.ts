@@ -1,28 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiService } from 'services/api/api.service';
+import { TelegramApiService } from './telegram-api/telegram-api.service';
+import { TelegramBotStateMachineService } from './telegram-bot-state-machine/telegram-bot-state-machine.service';
 
 @Injectable()
-export class KolacheBotService {
+export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
+  private polling = true;
   constructor(
-    private apiService: ApiService,
+    private telegramApiService: TelegramApiService,
     private configService: ConfigService,
+    private stateMachineService: TelegramBotStateMachineService,
   ) {}
 
-  async sendMessage(message: string) {
-    const botToken = this.configService.get('TG_BOT_TOKEN') as string;
-    const chatId = this.configService.get('TG_CHAT_ID') as string;
-    const threadId = this.configService.get('TG_CHAT_THREAD_ID') as string;
+  async onModuleInit() {
+    await this.telegramApiService.deleteWebhook();
+    const isProduction = this.configService.get('IS_PRODUCTION') as string;
+    if (isProduction === 'true') {
+      this.polling = false;
+      await this.telegramApiService.setWebhook();
+    } else {
+      this.polling = true;
+      await this.startPolling();
+    }
+  }
 
-    const response = await this.apiService.post(
-      `https://api.telegram.org/bot${botToken}/sendMessage`,
-      {
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'Markdown',
-        message_thread_id: threadId,
-      },
-    );
-    return response;
+  onModuleDestroy() {
+    this.telegramApiService.deleteWebhook();
+    this.polling = false;
+  }
+
+  private async startPolling() {
+    const poll = async () => {
+      if (!this.polling) return;
+
+      try {
+        const result = await this.telegramApiService.getPollingUpdates();
+        if (result?.result?.length) {
+          const update = result.result[0];
+          if (update?.message) await this.processMessage(update.message);
+          else if (update?.callback_query)
+            await this.processInlineKeyboard(update.callback_query);
+        }
+      } catch (err) {
+        console.error('Polling error:', err);
+      }
+
+      setTimeout(() => void poll(), 10000);
+    };
+
+    poll();
+  }
+
+  private async processInlineKeyboard(message: any) {
+    const chatId = message.message.chat.id as number;
+    // const queryData = message.data;
+    await this.stateMachineService.processAction({
+      chatId,
+      payload: message,
+    });
+  }
+
+  private async processMessage(message: any) {
+    const chatId = message.chat.id as number;
+    console.log(message);
+    await this.stateMachineService.processAction({
+      chatId,
+      payload: message,
+    });
+    // switch (true) {
+    //   case message.text === '/start':
+    //     this.chatStatus[chatId] = 'start-command-entered';
+    //     await this.telegramApiService.sendInlineKeyboardToUser({
+    //       chatId: chatId,
+    //       keyboardCommands: [{ text: 'Sign In', callback_data: '/auth' }],
+    //     });
+    //     break;
+    //   case message.text === '/auth':
+    //     this.chatStatus[chatId] = 'auth-command-entered';
+    //     await this.telegramApiService.sendTextMessageToUser({
+    //       message: 'Введіть email та пароль через пробіл:',
+    //       chatId,
+    //     });
+    //     break;
+    // }
   }
 }

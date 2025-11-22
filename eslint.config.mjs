@@ -31,6 +31,7 @@ export default tseslint.config(
         args: 'after-used',
         ignoreRestSiblings: false,
       }],
+      "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       '@typescript-eslint/no-explicit-any': 'off',

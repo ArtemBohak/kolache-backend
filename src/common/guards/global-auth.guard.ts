@@ -10,6 +10,7 @@ import { Request } from 'express';
 import { AuthService } from 'src/microservices/core/auth/auth.service';
 import { AUTH_ROLES } from '../types/auth';
 import { ROLES_KEY } from '../decorators/roles.decorator';
+import { TELEGRAM_REQUEST } from 'guards/telegram-request.decorator';
 
 @Injectable()
 export class GlobalAuthGuard implements CanActivate {
@@ -17,6 +18,7 @@ export class GlobalAuthGuard implements CanActivate {
     private reflector: Reflector,
     private authService: AuthService,
   ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<AUTH_ROLES[]>(
       ROLES_KEY,
@@ -27,6 +29,30 @@ export class GlobalAuthGuard implements CanActivate {
       return true;
     }
 
+    const isTelegramRequest = this.reflector.get(
+      TELEGRAM_REQUEST,
+      context.getClass(),
+    );
+
+    if (isTelegramRequest) {
+      console.log('smth');
+      // return this.validateTelegram(context, requiredRoles);
+    } else if (context.getType() === 'http') {
+      return this.validateJwt(context, requiredRoles);
+    }
+
+    return true;
+  }
+
+  private extractAccessToken(request: Request): string {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : '';
+  }
+
+  private async validateJwt(
+    context: ExecutionContext,
+    requiredRoles: AUTH_ROLES[],
+  ) {
     const request: Request = context.switchToHttp().getRequest();
 
     const accessToken = this.extractAccessToken(request);
@@ -52,8 +78,10 @@ export class GlobalAuthGuard implements CanActivate {
     return true;
   }
 
-  private extractAccessToken(request: Request): string {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : '';
-  }
+  // private async validateTelegram(
+  //   context: ExecutionContext,
+  //   requiredRoles: AUTH_ROLES[],
+  // ) {
+  //   return true;
+  // }
 }
