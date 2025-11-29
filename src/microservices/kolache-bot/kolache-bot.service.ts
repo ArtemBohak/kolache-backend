@@ -45,7 +45,7 @@ export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
         console.error('Polling error:', err);
       }
 
-      setTimeout(() => void poll(), 10000);
+      setTimeout(() => void poll(), 1000);
     };
 
     poll();
@@ -62,26 +62,9 @@ export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
 
   private async processMessage(message: any) {
     const chatId = message.chat.id as number;
-    console.log(message);
     await this.stateMachineService.processAction({
       chatId,
       payload: message,
     });
-    // switch (true) {
-    //   case message.text === '/start':
-    //     this.chatStatus[chatId] = 'start-command-entered';
-    //     await this.telegramApiService.sendInlineKeyboardToUser({
-    //       chatId: chatId,
-    //       keyboardCommands: [{ text: 'Sign In', callback_data: '/auth' }],
-    //     });
-    //     break;
-    //   case message.text === '/auth':
-    //     this.chatStatus[chatId] = 'auth-command-entered';
-    //     await this.telegramApiService.sendTextMessageToUser({
-    //       message: 'Введіть email та пароль через пробіл:',
-    //       chatId,
-    //     });
-    //     break;
-    // }
   }
 }

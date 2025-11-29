@@ -8,6 +8,8 @@ import { ConfigService } from '@nestjs/config';
 import { ApiService } from 'services/api/api.service';
 import { TelegramBotStateMachineService } from './telegram-bot-state-machine/telegram-bot-state-machine.service';
 import { BotFlowHandlersService } from './telegram-bot-state-machine/bot-flow-handlers.service';
+import { UsersModule } from '../core/users/users.module';
+import { AuthModule } from '../core/auth/auth.module';
 
 @Module({
   controllers: [
@@ -15,7 +17,7 @@ import { BotFlowHandlersService } from './telegram-bot-state-machine/bot-flow-ha
     PosterWebhooksController,
     ProductsWasteController,
   ],
-  imports: [],
+  imports: [UsersModule, AuthModule],
   providers: [
     ConfigService,
     ApiService,

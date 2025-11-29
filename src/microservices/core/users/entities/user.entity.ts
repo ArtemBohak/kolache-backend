@@ -17,4 +17,7 @@ export class User {
 
   @Column('simple-array', { default: [AUTH_ROLES.KOLACHE_GAME_USER] })
   roles: AUTH_ROLES[];
+
+  @Column({ nullable: true })
+  telegram_user_id: number;
 }

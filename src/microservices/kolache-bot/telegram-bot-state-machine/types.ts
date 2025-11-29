@@ -3,3 +3,8 @@ export enum ChatStatusesEnum {
   authCommandEntered = 'authCommandEntered',
   enteredAuthCredentials = 'enteredAuthCredentials',
 }
+
+export enum ChatCommandsEnum {
+  startCommand = '/start',
+  authCommand = '/auth',
+}

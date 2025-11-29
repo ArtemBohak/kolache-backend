@@ -42,7 +42,7 @@ export class TelegramApiService {
     const response = await this.apiService.get<GetPollingUpdatesResponse>(
       `${this.botUrl}/getUpdates`,
       {
-        timeout: 10,
+        timeout: 1,
         limit: 1,
         offset: this.lastUpdateId,
       },
@@ -81,10 +81,10 @@ export class TelegramApiService {
 
   async sendTextMessageToUser({ message, chatId }: SendTextMessageToUserDTO) {
     const response = await this.apiService.post(`${this.botUrl}/sendMessage`, {
-      message,
+      text: message,
       chat_id: chatId,
-      reply_markup: 'Markdown',
     });
+
     return response;
   }
 
@@ -94,7 +94,7 @@ export class TelegramApiService {
     message = 'Оберіть команду:',
   }: SendInlineKeyboardDTO) {
     const response = await this.apiService.post(`${this.botUrl}/sendMessage`, {
-      message,
+      text: message,
       chat_id: chatId,
       reply_markup: {
         inline_keyboard: [keyboardCommands],

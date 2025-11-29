@@ -35,7 +35,6 @@ export class GlobalAuthGuard implements CanActivate {
     );
 
     if (isTelegramRequest) {
-      console.log('smth');
       // return this.validateTelegram(context, requiredRoles);
     } else if (context.getType() === 'http') {
       return this.validateJwt(context, requiredRoles);

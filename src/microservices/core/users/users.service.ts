@@ -15,6 +15,12 @@ export class UsersService {
     return this.usersRepository.findOne({ where: [{ username }, { email }] });
   }
 
+  async updateTgUserId(dbUserId: number, tgUserId) {
+    return this.usersRepository.update(dbUserId, {
+      telegram_user_id: tgUserId,
+    });
+  }
+
   async createNewUser(createUserDto: CreateUserDto): Promise<User> {
     const newUser = this.usersRepository.create(createUserDto);
     return this.usersRepository.save(newUser);

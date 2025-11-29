@@ -26,6 +26,7 @@ import { HealthCheckModule } from './microservices/core/health-check/health-chec
         database: configService.get<string>('DB_NAME') as string,
         entities: [],
         autoLoadEntities: true,
+        migrations: ['./migrations/*.ts'],
         invalidWhereValuesBehavior: {
           null: 'sql-null',
           undefined: 'ignore',

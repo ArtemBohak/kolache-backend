@@ -16,8 +16,9 @@ export class TelegramBotStateMachineService {
     }
 
     const { newChatStatus } = await this.botFlowHandlers.processStateChange({
-      payload,
+      chatId,
       currentChatStatus: this.chatStatuses[chatId],
+      payload,
     });
 
     this.chatStatuses[chatId] = newChatStatus;

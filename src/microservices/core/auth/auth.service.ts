@@ -11,6 +11,7 @@ import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { SignUpUserDTO } from './dto/sign-up-user.dto';
+import { SignInTelegramDTO } from './dto/sign-in-telegram.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,28 @@ export class AuthService {
     }
 
     return await this.createJwtTokens(user);
+  }
+
+  async signInTelegram(data: SignInTelegramDTO) {
+    const user = await this.usersService.findOne(data);
+    if (!user) {
+      throw new UnauthorizedException(
+        'Імейл або пароль неправильні, спробуйте ще раз',
+      );
+    }
+
+    const passwordIsCorrect = await this.comparePasswords(
+      data.password,
+      user?.password,
+    );
+
+    if (!passwordIsCorrect) {
+      throw new UnauthorizedException(
+        'Імейл або пароль неправильні, спробуйте ще раз',
+      );
+    }
+
+    return this.usersService.updateTgUserId(user.id, data.telegramUserId);
   }
 
   async signUp(data: SignUpUserDTO) {
