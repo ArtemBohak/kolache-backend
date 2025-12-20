@@ -41,6 +41,7 @@ export class AuthService {
 
   async signInTelegram(data: SignInTelegramDTO) {
     const user = await this.usersService.findOne(data);
+
     if (!user) {
       throw new UnauthorizedException(
         'Імейл або пароль неправильні, спробуйте ще раз',

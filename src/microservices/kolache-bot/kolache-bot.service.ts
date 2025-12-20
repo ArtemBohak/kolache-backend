@@ -2,6 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TelegramApiService } from './telegram-api/telegram-api.service';
 import { TelegramBotStateMachineService } from './telegram-bot-state-machine/telegram-bot-state-machine.service';
+import { CallbackQuery, Message, Update } from '@grammyjs/types';
 
 @Injectable()
 export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
@@ -35,12 +36,7 @@ export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
 
       try {
         const result = await this.telegramApiService.getPollingUpdates();
-        if (result?.result?.length) {
-          const update = result.result[0];
-          if (update?.message) await this.processMessage(update.message);
-          else if (update?.callback_query)
-            await this.processInlineKeyboard(update.callback_query);
-        }
+        await this.processUpdate(result?.result?.[0]);
       } catch (err) {
         console.error('Polling error:', err);
       }
@@ -51,17 +47,28 @@ export class KolacheBotService implements OnModuleInit, OnModuleDestroy {
     poll();
   }
 
-  private async processInlineKeyboard(message: any) {
-    const chatId = message.message.chat.id as number;
-    // const queryData = message.data;
-    await this.stateMachineService.processAction({
-      chatId,
-      payload: message,
-    });
+  async processUpdate(update?: Update) {
+    if (update) {
+      if (update?.message) {
+        await this.processMessage(update.message);
+      } else if (update?.callback_query) {
+        await this.processInlineKeyboard(update.callback_query);
+      }
+    }
   }
 
-  private async processMessage(message: any) {
-    const chatId = message.chat.id as number;
+  private async processInlineKeyboard(message: CallbackQuery) {
+    const chatId = message.message?.chat.id;
+    if (chatId) {
+      await this.stateMachineService.processAction({
+        chatId,
+        payload: message,
+      });
+    }
+  }
+
+  private async processMessage(message: Message & Update.NonChannel) {
+    const chatId = message.chat.id;
     await this.stateMachineService.processAction({
       chatId,
       payload: message,

@@ -3,15 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { ApiService } from 'services/api/api.service';
 import { SendInlineKeyboardDTO } from './dto/message-to-kolache-channel-dto';
 import { SendTextMessageToUserDTO } from './dto/send-text-message-to-user-dto';
-
-type TelegramUpdate = {
-  update_id: number;
-  message?: any;
-  callback_query?: any;
-};
+import { type Update } from '@grammyjs/types';
 
 type GetPollingUpdatesResponse = {
-  result: TelegramUpdate[];
+  result: Update[];
 };
 
 @Injectable()

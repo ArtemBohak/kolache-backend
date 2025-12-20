@@ -416,6 +416,11 @@
     "@eslint/core" "^0.15.1"
     levn "^0.4.1"
 
+"@grammyjs/types@^3.22.2":
+  version "3.22.2"
+  resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.22.2.tgz#e59410615a9c70c00e7ae96bc5cd7ed4852059ca"
+  integrity sha512-uu7DX2ezhnBPozL3bXHmwhLvaFsh59E4QyviNH4Cij7EdVekYrs6mCzeXsa2pDk30l3uXo7DBahlZLzTPtpYZg==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz"

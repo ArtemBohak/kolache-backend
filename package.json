@@ -55,6 +55,7 @@
     "typeorm": "^0.3.26"
   },
   "devDependencies": {
+    "@grammyjs/types": "^3.22.2",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ChatCommandsEnum, ChatStatusesEnum } from './types';
 import { ProcessStateChangeDTO } from './dto/process-state-change.dto';
 import { TelegramApiService } from '../telegram-api';
-import { UsersService } from 'src/microservices/core/users/users.service';
 import { AuthService } from 'src/microservices/core/auth/auth.service';
 
 type Payload = {
@@ -40,7 +39,6 @@ type CommandHandler = (
 export class BotFlowHandlersService {
   constructor(
     private telegramApiService: TelegramApiService,
-    private usersService: UsersService,
     private authService: AuthService,
   ) {}
 
@@ -57,8 +55,6 @@ export class BotFlowHandlersService {
     } = {
       [ChatStatusesEnum.startCommandEntered]: this.handleStartCommandEntered,
       [ChatStatusesEnum.authCommandEntered]: this.handleAuthCommandEntered,
-      [ChatStatusesEnum.enteredAuthCredentials]:
-        this.handleEnteredAuthCredentials,
     };
 
     if (flowHandlers[currentChatStatus]) {
@@ -113,8 +109,24 @@ export class BotFlowHandlersService {
           password,
           telegramUserId: id,
         });
-      } catch {
-        // console.log(e.message);
+
+        await this.telegramApiService.sendTextMessageToUser({
+          chatId,
+          message: 'Ви успішно авторизувалися',
+        });
+
+        return {
+          newChatStatus: ChatStatusesEnum.startCommandEntered,
+        };
+      } catch (e) {
+        await this.telegramApiService.sendTextMessageToUser({
+          chatId,
+          message: e.message,
+        });
+
+        return {
+          newChatStatus: ChatStatusesEnum.authCommandEntered,
+        };
       }
     } else {
       await this.telegramApiService.sendTextMessageToUser({
@@ -126,15 +138,5 @@ export class BotFlowHandlersService {
         newChatStatus: ChatStatusesEnum.authCommandEntered,
       };
     }
-
-    return {
-      newChatStatus: ChatStatusesEnum.enteredAuthCredentials,
-    };
-  };
-
-  handleEnteredAuthCredentials: CommandHandler = async () => {
-    return {
-      newChatStatus: ChatStatusesEnum.authCommandEntered,
-    };
   };
 }

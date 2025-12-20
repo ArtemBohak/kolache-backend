@@ -1,2 +1,2 @@
-npx run lint-staged q
-npm run type-check
+yarn run lint-staged
+yarn run type-check

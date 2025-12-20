@@ -8,6 +8,7 @@ export class PosterWebhooksController {
   @Post()
   @HttpCode(HttpStatus.OK)
   async handleWebhooks(@Body() body: { object: string; action: string }) {
+    console.log('Received webhook:', body);
     if (body.object === 'incoming_order' && body.action === 'added') {
       await this.telegramApiService.sendMessageToKolacheChannel(
         'Увага, нове онлайн замовлення, перевірте планшет',
