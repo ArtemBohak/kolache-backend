@@ -8,9 +8,8 @@ export class PosterWebhooksController {
   @Post()
   @HttpCode(HttpStatus.OK)
   async handleWebhooks(
-    @Body() body: { object: string; action: string; data: any },
+    @Body() body: { object: string; action: string; rawData: any },
   ) {
-    console.log('Received webhook:', body);
     if (body.object === 'incoming_order' && body.action === 'added') {
       await this.telegramApiService.sendMessageToKolacheChannel(
         'Увага, нове онлайн замовлення, перевірте планшет',
@@ -18,8 +17,10 @@ export class PosterWebhooksController {
     }
 
     if (body.object === 'transaction' && body.action === 'changed') {
+      const data = JSON.parse(body.rawData);
+      console.log(data);
       await this.telegramApiService.sendTextMessageToUser({
-        message: `Зміни в чеку на суму ${body?.data?.transactions_history?.value_text}`,
+        message: `Зміни в чеку на суму ${data?.transactions_history?.value_text}`,
         chatId: 532890534,
       });
     }
